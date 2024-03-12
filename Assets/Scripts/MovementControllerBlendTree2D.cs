@@ -7,7 +7,7 @@ public class MovementControllerBlendTree2D : MonoBehaviour
 {
     public float speed = 5.0f; // La velocidad a la que se va a mover el personaje
 
-
+    public float rotationSpeed = 0.5f;
 
     private CharacterController characterController;
     private Animator animatorController;
@@ -21,18 +21,18 @@ public class MovementControllerBlendTree2D : MonoBehaviour
 
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
+        float horizontal = Input.GetAxis("Horizontal");
 
         // Calculamos el vector de movimiento -> ((0,0,1) * vertical + (1,0,0) * horizontal) * speed
-        Vector3 move = transform.forward * vertical + transform.right * horizontal;
+        Vector3 move = transform.forward * vertical;
+        transform.Rotate(Vector3.up * horizontal * rotationSpeed, 1, Space.Self);
         characterController.Move(move * speed * Time.deltaTime);
+
 
         // TODO: Establecer las animaciones!
 
 
-        animatorController.SetFloat("Velocidad x", move.x);
-        animatorController.SetFloat("Velocidad z", move.z);
+        animatorController.SetFloat("speed", move.z);
     }
    }
