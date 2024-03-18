@@ -8,6 +8,8 @@ public class openDoor : MonoBehaviour
 
     public Animator doorAnimator;
 
+    public AudioSource sound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,5 +26,10 @@ public class openDoor : MonoBehaviour
         }
 
         doorAnimator.SetBool("opened", opened);
+    }
+
+    public void playSound()
+    {
+        sound.Play();
     }
 }
