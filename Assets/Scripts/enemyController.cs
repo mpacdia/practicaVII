@@ -22,9 +22,10 @@ public class enemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-
-        enemyAnimator.SetBool("stay", stay);
+        if (enemyAnimator.GetBool("stay") == true)
+        {
+            agent.destination = mono.transform.position;
+        }
     }
 
     private void OnDrawGizmos()
@@ -32,17 +33,5 @@ public class enemyController : MonoBehaviour
         /* TODO 1: Crear un Gizmo que sea un rayo */
         Gizmos.color = Color.magenta;
         Gizmos.DrawRay(transform.position, transform.forward);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "mono")
-        {
-            Debug.Log("si");
-
-            stay = false;
-
-            
-        }
     }
 }

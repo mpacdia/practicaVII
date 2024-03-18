@@ -12,14 +12,18 @@ public class MovementControllerBlendTree2D : MonoBehaviour
     public float rotationSpeed = 0.5f;
 
     public bool doorArea = false;
-
     public bool insideHouse = false;
-
     public bool running = false;
+    public bool stay = true;
+
+    public GameObject enemy;
 
     private CharacterController characterController;
     private Animator animatorController;
     public Animator doorAnimator;
+    public Animator enemyAnimator;
+
+
     public CinemachineVirtualCamera cameraOutside;
     public CinemachineVirtualCamera cameraInside;
 
@@ -52,10 +56,13 @@ public class MovementControllerBlendTree2D : MonoBehaviour
             running = false;
         }
 
+
         animatorController.SetBool("running", running);
         animatorController.SetFloat("speed", Mathf.Abs(move.z));
 
         doorAnimator.SetBool("isCloseToDoor", doorArea);
+
+        enemyAnimator.SetBool("stay", stay);
     }
 
     public void OnTriggerEnter(Collider other)
@@ -69,6 +76,11 @@ public class MovementControllerBlendTree2D : MonoBehaviour
         {
             cameraOutside.Priority = 0;
             cameraInside.Priority = 1;
+        }
+
+        if (other.gameObject.tag == "enemy")
+        {
+            stay = true;
         }
     }
 
