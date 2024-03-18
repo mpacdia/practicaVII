@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
+using Cinemachine;
+
 
 public class MovementControllerBlendTree2D : MonoBehaviour
 {
@@ -9,8 +11,17 @@ public class MovementControllerBlendTree2D : MonoBehaviour
 
     public float rotationSpeed = 0.5f;
 
+    public bool doorArea = false;
+
+    public bool insideHouse = false;
+
+    public bool running = false;
+
     private CharacterController characterController;
     private Animator animatorController;
+    public Animator doorAnimator;
+    public CinemachineVirtualCamera cameraOutside;
+    public CinemachineVirtualCamera cameraInside;
 
     void Start()
     {
@@ -32,7 +43,46 @@ public class MovementControllerBlendTree2D : MonoBehaviour
 
         // TODO: Establecer las animaciones!
 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            running = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            running = false;
+        }
 
-        animatorController.SetFloat("speed", move.z);
+        animatorController.SetBool("running", running);
+        animatorController.SetFloat("speed", Mathf.Abs(move.z));
+
+        doorAnimator.SetBool("isCloseToDoor", doorArea);
     }
-   }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "doorArea")
+        {
+            doorArea = true;
+        }
+        
+        if (other.gameObject.tag == "insideHouse")
+        {
+            cameraOutside.Priority = 0;
+            cameraInside.Priority = 1;
+        }
+    }
+
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "doorArea")
+        {
+            doorArea = false;
+        }
+
+        if (other.gameObject.tag == "insideHouse")
+        {
+            cameraOutside.Priority = 1;
+            cameraInside.Priority = 0;
+        }
+    }
+}
